@@ -1,21 +1,22 @@
-import sensor_manager  
-import radio_manager 
+import sensor_manager   
+import radio_manager  
 import time 
+import microcontroller
+import watchdog
 
-# Start the stopwatch before the loop begins
+wdt = microcontroller.watchdog
+wdt.timeout = 3.0
+wdt.mode = watchdog.WatchDogMode.RESET
+wdt.feed()
+
 last_transmit_time = time.monotonic()
 
 while True:
-    # 1. Instantly check the sensor for new data (never stops)
-    readings = sensor_manager.get_readings()     
-    
-    # 2. Check the current time on the stopwatch
+    wdt.feed()
+    readings = sensor_manager.get_readings()               
     current_time = time.monotonic()
-    
-    # 3. If 1 second (1.0) has passed...
+         
     if current_time - last_transmit_time >= 1.0:
-        print(readings) # for testing on the ground
+        print(readings)
         radio_manager.send_data(readings)
-        
-        # Reset the stopwatch to wait another second
         last_transmit_time = current_time
