@@ -139,6 +139,6 @@ def get_readings():
         disconnect_sensor()
 
         return {
-            "temperature": None,
-            "pressure": None
+            "temperature": -999.0,
+            "pressure": -999.0
         }

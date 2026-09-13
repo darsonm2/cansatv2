@@ -3,10 +3,12 @@ import board
 import digitalio
 import adafruit_rfm9x
 
+RADIO_FREQ_MHZ = 433.0
+
 SPI = busio.SPI(
-    clock = board.GP2,
-    MOSI = board.GP3,   
-    MISO = board.GP4
+    clock=board.GP2,
+    MOSI=board.GP3,
+    MISO=board.GP4
 )
 
 cs = digitalio.DigitalInOut(board.GP5)
@@ -16,15 +18,16 @@ radio = adafruit_rfm9x.RFM9x(
     SPI, 
     cs,
     reset,
-    915.0 )    #confirm frequency later
+    RADIO_FREQ_MHZ
+)
 
 def send_data(data):
     try:
-        message = "TEMP;{},PRESS{}".format(
+        message = "{:.1f},{:.1f}".format(
             data["temperature"],
             data["pressure"]
         )
         message_bytes = message.encode("utf-8")
         radio.send(message_bytes)
     except Exception as problem:
-        print(problem,"Radio transmission error")
+        print(problem, "Radio transmission error")
