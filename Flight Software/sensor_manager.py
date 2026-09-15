@@ -115,8 +115,8 @@ def get_readings():
     if bmp280 is None:
         if not connect_sensor():
             return {
-                "temperature": None,
-                "pressure": None
+                "temperature": -999.0,
+                "pressure": -999.0
             } # return empty readings if the sensor connection fails
 
     try:
