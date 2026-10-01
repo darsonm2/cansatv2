@@ -41,11 +41,11 @@ error_log = {
 # --- The Listener & Graphing Loop ---
 def update(frame):
     error = ""
-    error_log["TOTAL_PACKETS"] += 1
     if ser.in_waiting > 0:
+        error_log["TOTAL_PACKETS"] += 1
         raw_bytes = ser.readline()
         decoded_string = raw_bytes.decode('utf-8').strip()
-
+        
         if decoded_string:
             if "ERROR" not in decoded_string:
                 data_list = decoded_string.split(',')
@@ -122,11 +122,6 @@ def update(frame):
         else:
             error_log["PACKET_CORRUPTED"] += 1
             error = "corrupt"
-    else:
-        error_log["PACKET_LOSS"] += 1
-        current_time = datetime.datetime.now().strftime('%H:%M:%S')
-        writer.writerow([current_time, "LOST", "LOST", "LOST", "LOST", "LOST"])
-        file.flush()
     if error == "corrupt":
         current_time = datetime.datetime.now().strftime('%H:%M:%S')
         writer.writerow([current_time, "CORRUPT", "CORRUPT", "CORRUPT", "CORRUPT", "CORRUPT"])
@@ -134,7 +129,7 @@ def update(frame):
 
 
 # This is the engine that runs the 'update' function every 1000ms (1 second)
-ani = animation.FuncAnimation(fig, update, interval=1000)
+ani = animation.FuncAnimation(fig, update, interval=200)
 
 # Opens the window and starts the loop
 plt.show() 

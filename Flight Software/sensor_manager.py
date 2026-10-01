@@ -92,7 +92,7 @@ def connect_sensor():
             scl=board.GP1,
             sda=board.GP0
         )
-        bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
+        bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c, address=0x76)
 
         print("BMP280 connected")
         return True
